@@ -17,111 +17,9 @@
 #include "keymap_swedish.h"
 #include "sendstring_swedish.h"
 
-
-uint16_t copy_paste_timer;
-
-enum layers {
-    _QWERTY = 0,
-    _GAME,
-    _COLEMAK_DH,
-    _LOWER,
-    _RAISE,
-    _NAV,
-    _FUNCTION,
-    _NUM,
-    _GAMELOW,
-    _MOUSE,
-    _ADJUST,
-};
-
-enum custom_keycodes {
-    TD = SAFE_RANGE,
-    VILL,
-    VILL5,
-    GLHF,
-    GG,
-    OC,
-    TILDE,
-    CMNT,
-    MK_BRC,
-    MK_SQT,
-    MK_CBR,
-    MK_PRN,
-    MK_COL,
-};
-
-enum combos {
-  AB_ESC,
-  DTC_COL,
-  JK_BRC,
-  KL_SQT,
-  CM_CBR,
-  UI_PRN,
-  QW_SFT,
-};
-
-const uint16_t PROGMEM ab_combo[] = {KC_A, KC_B, COMBO_END};
-const uint16_t PROGMEM dtc_combo[] = {SE_DOT, SE_COMM, COMBO_END};
-const uint16_t PROGMEM jk_combo[] = {KC_J, KC_K, COMBO_END};
-const uint16_t PROGMEM kl_combo[] = {KC_K, KC_L, COMBO_END};
-const uint16_t PROGMEM cm_combo[] = {SE_COMM, KC_M, COMBO_END};
-const uint16_t PROGMEM ui_combo[] = {KC_U, KC_I, COMBO_END};
-const uint16_t PROGMEM qw_combo[] = {KC_Q, KC_W, COMBO_END};
-
-combo_t key_combos[COMBO_COUNT] = {
-  [AB_ESC]  = COMBO(ab_combo, KC_ESC),
-  [DTC_COL] = COMBO(dtc_combo, SE_COLN),
-  [JK_BRC]  = COMBO(jk_combo, MK_BRC),
-  [KL_SQT]  = COMBO(kl_combo, MK_SQT),
-  [CM_CBR]  = COMBO(cm_combo, MK_CBR),
-  [UI_PRN]  = COMBO(ui_combo, MK_PRN),
-  [QW_SFT]  = COMBO(qw_combo, KC_LSFT)
-};
-
-// Aliases for readability
-#define QWERTY   DF(_QWERTY)
-#define COLEMAK  DF(_COLEMAK_DH)
-#define GAME     DF(_GAME)
-
-#define BS_LOW   LT(_LOWER, KC_BSPC)
-#define ENT_RS   LT(_RAISE, KC_ENT)
-#define NAV      MO(_NAV)
-#define SPCNAV   LT(_NAV, KC_SPC)
-#define TABNUM   LT(_NUM, KC_TAB)
-#define FKEYS    MO(_FUNCTION)
-#define ADJUST   MO(_ADJUST)
-#define MOUSE    LT(_MOUSE, KC_ESC)
-#define GLow     LM(_GAMELOW, MOD_LCTL)
-#define SpLow    LT(_GAMELOW, KC_SPC)
-#define CTL_ESC  MT(MOD_LCTL, KC_ESC)
-#define CTL_QUOT MT(MOD_RCTL, KC_QUOTE)
-#define ALT_ENT  MT(MOD_LALT, KC_ENT)
-
-// Mod Tap Home row
-#define HM_A     LGUI_T(KC_A)
-#define HM_S     LALT_T(KC_S)
-#define HM_D     LCTL_T(KC_D)
-#define HM_F     LSFT_T(KC_F)
-#define HM_J     LSFT_T(KC_J)
-#define HM_K     LCTL_T(KC_K)
-#define HM_L     LALT_T(KC_L)
-#define HM_ODIA  LGUI_T(SE_ODIA)
-
-#define U_RDO KC_AGIN
-#define U_UND KC_UNDO
-
-#define C_PGUP C(KC_PGUP)
-#define C_PGDN C(KC_PGDN)
-#define CUT    C(KC_X)
-#define YANK   C(KC_INS)
-#define PASTE  S(KC_INS)
-#define COMNT  C(SE_QUOT)
-#define DLINE  C(KC_D)
-#define DUPLIC C(S(KC_D))
-#define CtrlK  C(KC_K)
-#define SCtrlK S(C(KC_K))
-#define B_BACK A(KC_LEFT)
-#define B_FWD  A(KC_RIGHT)
+#include "caps_word.h"
+#include "combos.c"
+#include "takikoo.h"
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -400,34 +298,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case VILL5:
       if (record->event.pressed) {
         SEND_STRING(SS_LCTL("a") SS_DELAY(100) SS_LSFT("q"));
-      }
-      return false;
-      break;
-    case MK_PRN:
-      if (record->event.pressed) {
-        SEND_STRING("()");
-        tap_code(KC_LEFT);
-      }
-      return false;
-      break;
-    case MK_BRC:
-      if (record->event.pressed) {
-        SEND_STRING("[]");
-        tap_code(KC_LEFT);
-      }
-      return false;
-      break;
-    case MK_SQT:
-      if (record->event.pressed) {
-        SEND_STRING("''");
-        tap_code(KC_LEFT);
-      }
-      return false;
-      break;
-    case MK_CBR:
-      if (record->event.pressed) {
-        SEND_STRING("{}");
-        tap_code(KC_LEFT);
       }
       return false;
       break;
